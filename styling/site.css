@@ -3,7 +3,7 @@ body {
     overflow-y: auto;
     height: 100vh;
     margin: 0;
-    background-image: url("../images/ocean-background.png");
+    background-image: url("../images/ocean-background-darker.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -90,6 +90,10 @@ body::-webkit-scrollbar {
 
 .clickable {
     cursor: pointer;
+}
+
+.clickable:hover {
+    text-decoration: underline;
 }
 
 .text-input {

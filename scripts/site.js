@@ -37,3 +37,13 @@ function HideElement(element) {
         element.classList.add("d-none");
     }
 }
+
+function GetSmallestDim() {
+    let body = document.body,
+        html = document.documentElement;
+
+    let height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight ),
+        width = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
+
+    return Math.min(height, width);
+}

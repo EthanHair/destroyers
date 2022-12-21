@@ -1,0 +1,18 @@
+.tile {
+    display: block;
+    height: 300px;
+    width: 300px;
+    border: 4px black solid;
+    background-image: url("../images/battleship-squares-512.png");
+    background-size: cover;
+    background-position: 0 0;
+}
+
+.board {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    gap: 4px;
+}
