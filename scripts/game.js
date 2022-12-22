@@ -12,15 +12,15 @@ const board = document.getElementById("board");
 let diffDict = new Map()
 diffDict.set("easy", { boardSize: 5,
                        numShips: 3,
-                       ships: [new Ship(2), new Ship(2), new Ship(3)] });
+                       ships: [new Ship(2, "Destroyer"), new Ship(2, "Mine Sweeper"), new Ship(3, "Submarine")] });
 diffDict.set("medium", { boardSize: 7,
-                         numShips: 3,
-                         ships: [new Ship(2), new Ship(3), new Ship(4)] });
+                         numShips: 4,
+                         ships: [new Ship(2, "Destroyer"), new Ship(2, "Mine Sweeper"), new Ship(3, "Submarine"), new Ship(4, "Battleship")] });
 diffDict.set("hard", { boardSize: 10,
-                       numShips: 3,
-                       ships: [new Ship(2), new Ship(3), new Ship(4), new Ship(5)] });
-let tileSize = 300;
-let boardPixels = 600;
+                       numShips: 5,
+                       ships: [new Ship(2, "Destroyer"), new Ship(3, "Cruiser"), new Ship(3, "Submarine"), new Ship(4, "Battleship"), new Ship(5, "Carrier")] });
+let tileSize;
+let boardPixels;
 let tiles = [];
 let currentDiff;
 
@@ -33,7 +33,7 @@ function StartGame() {
 
 function Easy() {
     currentDiff = diffDict.get("easy");
-    Ship.boardSize = currentDiff.boardSize;
+    Ship.createEmptyBoardList(currentDiff.boardSize)
 
     GenerateBoard();
     PlaceShips();
@@ -41,15 +41,15 @@ function Easy() {
 
 function Medium() {
     currentDiff = diffDict.get("medium");
-    Ship.boardSize = currentDiff.boardSize;
+    Ship.createEmptyBoardList(currentDiff.boardSize)
 
     GenerateBoard();
     PlaceShips();
 }
 
 function Hard() {
-    currentDiff = diffDict.get("medium");
-    Ship.boardSize = currentDiff.boardSize;
+    currentDiff = diffDict.get("hard");
+    Ship.createEmptyBoardList(currentDiff.boardSize)
 
     GenerateBoard();
     PlaceShips();
@@ -57,12 +57,12 @@ function Hard() {
 
 function GenerateBoard() {
     let dim = GetSmallestDim();
-    tileSize = RoundDownToNearestMult(dim / currentDiff.boardSize, 25);
-    boardPixels = (tileSize + 8) * currentDiff.boardSize + (Math.floor(tileSize / 2));
+    tileSize = RoundDownToNearestMult(dim / Ship.boardSize, 25);
+    boardPixels = (tileSize + 8) * Ship.boardSize + (Math.floor(tileSize / 2));
 
     while (boardPixels > dim) {
         tileSize = tileSize - 25;
-        boardPixels = (tileSize + 8) * currentDiff.boardSize + (Math.floor(tileSize / 2));
+        boardPixels = (tileSize + 8) * Ship.boardSize + (Math.floor(tileSize / 2));
     }
 
     board.style.width = `${boardPixels}px`;
@@ -70,29 +70,47 @@ function GenerateBoard() {
     board.innerHTML = "";
     StartGame();
 
-    for (let i = 0; i < currentDiff.boardSize**2; i++) {
+    for (let i = 0; i < Ship.boardSize**2; i++) {
         board.innerHTML += `<div id=\"${i}\" class=\"tile\" style=\"width: ${tileSize}px; height: ${tileSize}px\"></div>`;
-        Ship.isShipHere.push(false);
     }
 
     let tiles = document.getElementsByClassName("tile");
 
     for (let tile of tiles) {
         tile.addEventListener("click", () => {
-            ShootShip(tile)
+            Shoot(tile)
         });
     }
 }
 
 function PlaceShips() {
-
+    for (let ship of currentDiff.ships) {
+        ship.tryPlace();
+    }
 }
 
-function ShootShip(ship) {
-    if (Ship.isShipHere[parseInt(ship.id)]) {
-        ship.style.backgroundPositionY = `${tileSize}px`;
+function Shoot(tile) {
+    if (Ship.isShipHere[parseInt(tile.id)]) {
+        console.log("Hit!")
+        tile.style.backgroundPositionY = `${tileSize}px`;
+        let shipSection = Ship.locToShipDict.get(tile.id).section;
+        let ship = Ship.locToShipDict.get(tile.id).shipInstance;
+        shipSection.isHit = true;
+        ship.checkSunk();
+        if (ship.isSunk) {
+            console.log(`You sunk the ${ship.name}!`);
+        }
+        let allShipsSunk = true;
+        for (let ship of currentDiff.ships) {
+            if (!ship.isSunk) {
+                allShipsSunk = false;
+            }
+        }
+        if (allShipsSunk) {
+            console.log("You have sunk all ships!");
+        }
     }
     else {
-        ship.style.backgroundPositionY = `${tileSize * 2}px`;
+        tile.style.backgroundPositionY = `${tileSize * 2}px`;
     }
 }

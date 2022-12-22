@@ -56,6 +56,10 @@ body::-webkit-scrollbar {
     gap: 16px;
 }
 
+.gap-32 {
+    gap: 32px;
+}
+
 .pixel-words {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
