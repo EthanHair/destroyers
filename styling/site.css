@@ -3,7 +3,7 @@ body {
     overflow-y: auto;
     height: 100vh;
     margin: 0;
-    background-image: url("../images/ocean-background-darker.png");
+    background-image: url("../images/ocean-background-darker-blurred.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

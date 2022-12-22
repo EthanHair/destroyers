@@ -9,10 +9,20 @@ const board = document.getElementById("board");
 // Properties
 //#region
 
+let diffDict = new Map()
+diffDict.set("easy", { boardSize: 5,
+                       numShips: 3,
+                       ships: [new Ship(2), new Ship(2), new Ship(3)] });
+diffDict.set("medium", { boardSize: 7,
+                         numShips: 3,
+                         ships: [new Ship(2), new Ship(3), new Ship(4)] });
+diffDict.set("hard", { boardSize: 10,
+                       numShips: 3,
+                       ships: [new Ship(2), new Ship(3), new Ship(4), new Ship(5)] });
 let tileSize = 300;
-let boardSize = 2;
 let boardPixels = 600;
 let tiles = [];
+let currentDiff;
 
 //#endregion
 
@@ -22,31 +32,37 @@ function StartGame() {
 }
 
 function Easy() {
-    boardSize = 5;
+    currentDiff = diffDict.get("easy");
+    Ship.boardSize = currentDiff.boardSize;
 
     GenerateBoard();
+    PlaceShips();
 }
 
 function Medium() {
-    boardSize = 7;
+    currentDiff = diffDict.get("medium");
+    Ship.boardSize = currentDiff.boardSize;
 
     GenerateBoard();
+    PlaceShips();
 }
 
 function Hard() {
-    boardSize = 10;
+    currentDiff = diffDict.get("medium");
+    Ship.boardSize = currentDiff.boardSize;
 
     GenerateBoard();
+    PlaceShips();
 }
 
 function GenerateBoard() {
     let dim = GetSmallestDim();
-    tileSize = RoundDownToNearestMult(dim / boardSize, 25);
-    boardPixels = (tileSize + 8) * boardSize + (Math.floor(tileSize / 2));
+    tileSize = RoundDownToNearestMult(dim / currentDiff.boardSize, 25);
+    boardPixels = (tileSize + 8) * currentDiff.boardSize + (Math.floor(tileSize / 2));
 
     while (boardPixels > dim) {
         tileSize = tileSize - 25;
-        boardPixels = (tileSize + 8) * boardSize + (Math.floor(tileSize / 2));
+        boardPixels = (tileSize + 8) * currentDiff.boardSize + (Math.floor(tileSize / 2));
     }
 
     board.style.width = `${boardPixels}px`;
@@ -54,8 +70,9 @@ function GenerateBoard() {
     board.innerHTML = "";
     StartGame();
 
-    for (let i = 0; i < boardSize**2; i++) {
-        board.innerHTML += `<div class=\"tile\" style=\"width: ${tileSize}px; height: ${tileSize}px\"></div>`;
+    for (let i = 0; i < currentDiff.boardSize**2; i++) {
+        board.innerHTML += `<div id=\"${i}\" class=\"tile\" style=\"width: ${tileSize}px; height: ${tileSize}px\"></div>`;
+        Ship.isShipHere.push(false);
     }
 
     let tiles = document.getElementsByClassName("tile");
@@ -67,7 +84,15 @@ function GenerateBoard() {
     }
 }
 
+function PlaceShips() {
+
+}
+
 function ShootShip(ship) {
-    let currentShipBGY = (ship.style.backgroundPositionY == "") ? 0 : parseInt(ship.style.backgroundPositionY);
-    ship.style.backgroundPositionY = `${currentShipBGY + tileSize}px`;
+    if (Ship.isShipHere[parseInt(ship.id)]) {
+        ship.style.backgroundPositionY = `${tileSize}px`;
+    }
+    else {
+        ship.style.backgroundPositionY = `${tileSize * 2}px`;
+    }
 }
