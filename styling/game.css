@@ -16,3 +16,83 @@
     align-content: center;
     gap: 4px;
 }
+
+.destroyer-icon {
+    height: 128px;
+    width: 128px;
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 0;
+}
+
+.destroyer-icon-explosion {
+    height: 128px;
+    width: 128px;
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 -128px;
+}
+
+.cruiser-icon {
+    height: 128px;
+    width: 128px;
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 768px;
+}
+
+.cruiser-icon-explosion {
+    height: 128px;
+    width: 128px;
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 640px;
+}
+
+.submarine-icon {
+    height: 128px;
+    width: 128px;
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 512px;
+}
+
+.submarine-icon-explosion {
+    height: 128px;
+    width: 128px;
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 384px;
+}
+
+.battleship-icon {
+    height: 128px;
+    width: 128px;
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 256px;
+}
+
+.battleship-icon-explosion {
+    height: 128px;
+    width: 128px;
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 128px;
+}
+
+.carrier-icon {
+    height: 128px;
+    width: 256px;
+    background-image: url("../images/battleship-icons-5.png");
+    background-size: cover;
+    background-position: 0 0;
+}
+
+.carrier-icon-explosion {
+    height: 128px;
+    width: 256px;
+    background-image: url("../images/battleship-icons-5.png");
+    background-size: cover;
+    background-position: 0 128px;
+}

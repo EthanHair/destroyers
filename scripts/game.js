@@ -2,7 +2,15 @@
 //#region
 
 const titlePage = document.getElementById("title-page");
+const gameArea = document.getElementById("game-area");
 const board = document.getElementById("board");
+const iconArea = document.getElementById("icon-area");
+const destroyerIcon = document.getElementById("destroyer-icon");
+const destroyer2Icon = document.getElementById("destroyer2-icon");
+const cruiserIcon = document.getElementById("cruiser-icon");
+const submarineIcon = document.getElementById("submarine-icon");
+const battleshipIcon = document.getElementById("battleship-icon");
+const carrierIcon = document.getElementById("carrier-icon");
 
 //#endregion
 
@@ -12,13 +20,22 @@ const board = document.getElementById("board");
 let diffDict = new Map()
 diffDict.set("easy", { boardSize: 5,
                        numShips: 3,
-                       ships: [new Ship(2, "Destroyer"), new Ship(2, "Mine Sweeper"), new Ship(3, "Submarine")] });
+                       ships: [ new Ship(2, "Destroyer", destroyerIcon), 
+                                new Ship(2, "Destroyer", destroyer2Icon), 
+                                new Ship(3, "Cruiser", cruiserIcon) ] });
 diffDict.set("medium", { boardSize: 7,
                          numShips: 4,
-                         ships: [new Ship(2, "Destroyer"), new Ship(2, "Mine Sweeper"), new Ship(3, "Submarine"), new Ship(4, "Battleship")] });
+                         ships: [ new Ship(2, "Destroyer", destroyerIcon), 
+                                  new Ship(2, "Destroyer", destroyer2Icon), 
+                                  new Ship(3, "Cruiser", cruiserIcon), 
+                                  new Ship(4, "Battleship", battleshipIcon) ] });
 diffDict.set("hard", { boardSize: 10,
                        numShips: 5,
-                       ships: [new Ship(2, "Destroyer"), new Ship(3, "Cruiser"), new Ship(3, "Submarine"), new Ship(4, "Battleship"), new Ship(5, "Carrier")] });
+                       ships: [ new Ship(2, "Destroyer", destroyerIcon), 
+                                new Ship(3, "Cruiser", cruiserIcon), 
+                                new Ship(3, "Submarine", submarineIcon), 
+                                new Ship(4, "Battleship", battleshipIcon), 
+                                new Ship(5, "Carrier", carrierIcon) ] });
 let tileSize;
 let boardPixels;
 let tiles = [];
@@ -28,7 +45,7 @@ let currentDiff;
 
 function StartGame() {
     HideElement(titlePage);
-    ShowElement(board);
+    ShowElement(gameArea);
 }
 
 function Easy() {
@@ -86,6 +103,7 @@ function GenerateBoard() {
 function PlaceShips() {
     for (let ship of currentDiff.ships) {
         ship.tryPlace();
+        ship.showIcon();
     }
 }
 

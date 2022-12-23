@@ -28,7 +28,22 @@
                 </div>
             </div>
         </div>
-        <div id="board" class="board d-none"></div>
+        <div id="game-area" class="row width-100 space-between d-none align-center">
+            <div class="width-20 height-100">
+                <!-- TODO: Add a life counter here -->
+            </div>
+            <div id="board" class="board d-none"></div>
+            <div class="width-20 height-100">
+                <div id="icon-area" class="column center">
+                    <div id="destroyer-icon" class="destroyer-icon d-none"></div>
+                    <div id="destroyer2-icon" class="destroyer-icon d-none"></div>
+                    <div id="cruiser-icon" class="cruiser-icon d-none"></div>
+                    <div id="submarine-icon" class="submarine-icon d-none"></div>
+                    <div id="battleship-icon" class="battleship-icon d-none"></div>
+                    <div id="carrier-icon" class="carrier-icon d-none"></div>
+                </div>
+            </div>
+        </div>
     </body>
     <script src="scripts/site.js"></script>
     <script src="scripts/game.js"></script>

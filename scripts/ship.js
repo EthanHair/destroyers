@@ -1,10 +1,12 @@
 class Ship {
-    constructor(length, name) {
+    constructor(length, name, iconElement) {
         this.length = length;
         this.name = name;
         this.isSunk = false;
         this.isPlaced = false;
         this.sections = [];
+        this.iconElement = iconElement;
+        this.destroyedClass = name.toLowerCase() + "-icon-explosion";
         for (let i = 0; i < length; i++) {
             this.sections.push({ locId: "", isHit: false });
         }
@@ -33,8 +35,19 @@ class Ship {
                 tempIsSunk = false;
             }
         }
-        this.isSunk = tempIsSunk;
+
+        if (tempIsSunk) {
+            this.isSunk = true;
+            this.iconElement.classList.add(this.destroyedClass);
+        } else {
+            this.isSunk = false;
+        }
         return this.isSunk;
+    }
+
+    showIcon() {
+        this.iconElement.classList.remove(this.destroyedClass);
+        ShowElement(this.iconElement);
     }
 
     tryPlace() {
@@ -47,11 +60,11 @@ class Ship {
 
             let bestGuessesForDirection = [];
             // Check position relative to left side and if good add left as a good direction to try
-            if ((startLocation - RoundDownToNearestMult(startLocation, Ship.boardSize) + 1) > this.length) {
+            if ((startLocation - RoundDownToNearestMult(startLocation, Ship.boardSize) + 1) >= this.length) {
                 bestGuessesForDirection.push(2);
             }
             // Check position relative to right side and if good add right as a good direction to try
-            if ((RoundDownToNearestMult(startLocation + Ship.boardSize, Ship.boardSize) - startLocation) > this.length) {
+            if ((RoundDownToNearestMult(startLocation + Ship.boardSize, Ship.boardSize) - startLocation) >= this.length) {
                 bestGuessesForDirection.push(0);
             }
             // Check position relative to bottom and if good add down as a good direction to try
@@ -67,7 +80,8 @@ class Ship {
 
             // Trying the directions from the best guesses to see if one works
             let goodPlacement = true;
-            for (let i = 0; i < bestGuessesForDirection.length; i++) {
+            let numOfTries = bestGuessesForDirection.length;
+            for (let i = 0; i < numOfTries; i++) {
                 // Picking a random direction from the best guesses
                 let rndDirIdx = getRndInteger(0, bestGuessesForDirection.length)
                 let direction = bestGuessesForDirection[rndDirIdx];
@@ -91,6 +105,8 @@ class Ship {
                     for (let section of this.sections) {
                         section.locId = "";
                     }
+
+                    bestGuessesForDirection.splice(rndDirIdx, 1);
 
                     console.log("Placement failed...\nTrying again");
                 }
