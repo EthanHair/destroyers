@@ -96,3 +96,18 @@
     background-size: cover;
     background-position: 0 128px;
 }
+
+.ammo-icon {
+    height: 64px;
+    width: 128px;
+    background-image: url("../images/ammo-icon.png");
+    background-size: cover;
+}
+
+.player-ship {
+    height: 128px;
+    width: 256px;
+    background-image: url("../images/player-ship.png");
+    background-size: cover;
+    background-position: 0 0;
+}

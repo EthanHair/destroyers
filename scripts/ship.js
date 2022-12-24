@@ -1,11 +1,12 @@
 class Ship {
-    constructor(length, name, iconElement) {
+    constructor(length, name, iconElement, iconElementArea) {
         this.length = length;
         this.name = name;
         this.isSunk = false;
         this.isPlaced = false;
         this.sections = [];
         this.iconElement = iconElement;
+        this.iconElementArea = iconElementArea;
         this.destroyedClass = name.toLowerCase() + "-icon-explosion";
         for (let i = 0; i < length; i++) {
             this.sections.push({ locId: "", isHit: false });
@@ -17,6 +18,7 @@ class Ship {
     static isBoardGenerated = false;
     static idxStepForDirections = [];
     static locToShipDict = new Map();
+    static allShipsSunk = false;
 
     static createEmptyBoardList(boardSize) {
         Ship.boardSize = boardSize;
@@ -47,7 +49,7 @@ class Ship {
 
     showIcon() {
         this.iconElement.classList.remove(this.destroyedClass);
-        ShowElement(this.iconElement);
+        ShowElement(this.iconElementArea);
     }
 
     tryPlace() {

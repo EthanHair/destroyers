@@ -29,18 +29,34 @@
             </div>
         </div>
         <div id="game-area" class="row width-100 space-between d-none align-center">
-            <div class="width-20 height-100">
-                <!-- TODO: Add a life counter here -->
+            <div class="width-20 height-100 justify-end">
+                <div class="column center pixel-words">
+                    <div id="player-ship" class="player-ship"></div>
+                    <div id="ammo-icon" class="ammo-icon"></div>
+                    <div id="ammo-left">35</div>
+                </div>
             </div>
             <div id="board" class="board d-none"></div>
-            <div class="width-20 height-100">
-                <div id="icon-area" class="column center">
-                    <div id="destroyer-icon" class="destroyer-icon d-none"></div>
-                    <div id="destroyer2-icon" class="destroyer-icon d-none"></div>
-                    <div id="cruiser-icon" class="cruiser-icon d-none"></div>
-                    <div id="submarine-icon" class="submarine-icon d-none"></div>
-                    <div id="battleship-icon" class="battleship-icon d-none"></div>
-                    <div id="carrier-icon" class="carrier-icon d-none"></div>
+            <div class="width-20 height-100 justify-start">
+                <div id="icon-area" class="column center pixel-words">
+                    <div id="destroyer-icon-area" class="row space-between min-width-60 gap-8 d-none">
+                        <div id="destroyer-icon" class="destroyer-icon"></div><div class="align-center">2</div>
+                    </div>
+                    <div id="destroyer2-icon-area" class="row space-between min-width-60 gap-8 d-none">
+                        <div id="destroyer2-icon" class="destroyer-icon"></div><div class="align-center">2</div>
+                    </div>
+                    <div id="cruiser-icon-area" class="row space-between min-width-60 gap-8 d-none">
+                        <div id="cruiser-icon" class="cruiser-icon"></div><div class="align-center">3</div>
+                    </div>
+                    <div id="submarine-icon-area" class="row space-between min-width-60 gap-8 d-none">
+                        <div id="submarine-icon" class="submarine-icon"></div><div class="align-center">3</div>
+                    </div>
+                    <div id="battleship-icon-area" class="row space-between min-width-60 gap-8 d-none">
+                        <div id="battleship-icon" class="battleship-icon"></div><div class="align-center">4</div>
+                    </div>
+                    <div id="carrier-icon-area" class="row space-between min-width-60 gap-8 d-none">
+                        <div id="carrier-icon" class="carrier-icon"></div><div class="align-center">5</div>
+                    </div>
                 </div>
             </div>
         </div>
