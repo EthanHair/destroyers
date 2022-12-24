@@ -8,6 +8,7 @@ class Ship {
         this.iconElement = iconElement;
         this.iconElementArea = iconElementArea;
         this.destroyedClass = name.toLowerCase() + "-icon-explosion";
+        this.class = name.toLowerCase() + "-icon";
         for (let i = 0; i < length; i++) {
             this.sections.push({ locId: "", isHit: false });
         }
@@ -18,6 +19,7 @@ class Ship {
     static isBoardGenerated = false;
     static idxStepForDirections = [];
     static locToShipDict = new Map();
+    static cssBackgroundPosMultiplierDict = new Map();
     static allShipsSunk = false;
 
     static createEmptyBoardList(boardSize) {
@@ -28,6 +30,12 @@ class Ship {
         Ship.idxStepForDirections = [1, -Ship.boardSize, -1, Ship.boardSize];
         Ship.locToShipDict = new Map();
         Ship.isBoardGenerated = true;
+        Ship.cssBackgroundPosMultiplierDict = new Map();
+        Ship.cssBackgroundPosMultiplierDict.set("destroyer", 0);
+        Ship.cssBackgroundPosMultiplierDict.set("cruiser", 2);
+        Ship.cssBackgroundPosMultiplierDict.set("submarine", 4);
+        Ship.cssBackgroundPosMultiplierDict.set("battleship", 6);
+        Ship.cssBackgroundPosMultiplierDict.set("carrier", 1);
     }
 
     checkSunk() {
@@ -78,7 +86,7 @@ class Ship {
                 bestGuessesForDirection.push(1);
             }
 
-            console.log(`Starting at ${startLocation}(Length ${this.length})...\nThe best guesses for direction are: ${bestGuessesForDirection}`);
+            console.log(`Starting at ${startLocation} (${this.name})...\nThe best guesses for direction are: ${bestGuessesForDirection}`);
 
             // Trying the directions from the best guesses to see if one works
             let goodPlacement = true;

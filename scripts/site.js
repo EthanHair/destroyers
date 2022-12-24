@@ -24,6 +24,8 @@ function RoundDownToNearestMult(number, mult) {
     return multipleOfMult;
 }
 
+const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
 function ShowElement(element) {
     if (element.classList.contains("d-none"))
     {

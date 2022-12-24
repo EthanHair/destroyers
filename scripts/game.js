@@ -18,7 +18,8 @@ const battleshipIconArea = document.getElementById("battleship-icon-area");
 const carrierIcon = document.getElementById("carrier-icon");
 const carrierIconArea = document.getElementById("carrier-icon-area");
 const ammoLeftElement = document.getElementById("ammo-left");
-const playerShip = document.getElementById("player-ship")
+const playerShip = document.getElementById("player-ship");
+const crosshairElement = document.getElementById("crosshairs");
 
 //#endregion
 
@@ -54,6 +55,8 @@ let currentDiff;
 let ammoLeft;
 let playerShipAnimation;
 let canPlayAnimation = true;
+let started = false;
+let hasShotThere = [];
 
 //#endregion
 
@@ -104,6 +107,7 @@ function GenerateBoard() {
 
     for (let i = 0; i < Ship.boardSize**2; i++) {
         board.innerHTML += `<div id=\"${i}\" class=\"tile\" style=\"width: ${tileSize}px; height: ${tileSize}px\"></div>`;
+        hasShotThere.push(false);
     }
 
     tiles = document.getElementsByClassName("tile");
@@ -120,13 +124,18 @@ function PlaceShips() {
         ship.tryPlace();
         ship.showIcon();
     }
+    
+    setTimeout(() => {
+        started = true;
+    }, 500);
 }
 
 function Shoot(tile) {
-    if (Ship.isBoardGenerated && ammoLeft > 0 && !Ship.allShipsSunk) {
+    if (Ship.isBoardGenerated && ammoLeft > 0 && !Ship.allShipsSunk && !hasShotThere[parseInt(tile.id)]) {
         PlayShipFireAnimation();
         ammoLeft--;
         ammoLeftElement.innerHTML = ammoLeft;
+        hasShotThere[parseInt(tile.id)] = true;
 
         if (Ship.isShipHere[parseInt(tile.id)]) {
             console.log("Hit!")
@@ -147,10 +156,15 @@ function Shoot(tile) {
             if (allShipsSunk) {
                 Ship.allShipsSunk = true;
                 console.log("You have sunk all ships!");
+                GameOver()
             }
         }
         else {
             tile.style.backgroundPositionY = `${tileSize * 2}px`;
+        }
+
+        if (ammoLeft <= 0) {
+            GameOver()
         }
     }
 }
@@ -169,4 +183,83 @@ function PlayShipFireAnimation() {
             }
         }
     }, (1000 / 8));
+}
+
+function CheckTilesClick(x, y) {
+    for (let i = 0; i < tiles.length; i++) {
+        if (IsClickOnTile(x, y, tiles[i])) {
+            Shoot(tiles[i]);
+        }
+    }
+}
+
+function IsClickOnTile(x, y, tile){
+    let tileRect = tile.getBoundingClientRect();
+    
+    let tileMinX = tileRect.x;
+    let tileMaxX = tileMinX + tileRect.width;
+    let tileMinY = tileRect.y;
+    let tileMaxY = tileMinY + tileRect.height;
+
+    if (x >= tileMinX && x <= tileMaxX && y >= tileMinY && y <= tileMaxY) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function IsInBoard(x, y) {
+    let boardRect = board.getBoundingClientRect();
+    
+    let boardMinX = boardRect.x;
+    let boardMaxX = boardMinX + boardRect.width;
+    let boardMinY = boardRect.y;
+    let boardMaxY = boardMinY + boardRect.height;
+
+    if (x >= boardMinX && x <= boardMaxX && y >= boardMinY && y <= boardMaxY) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+window.addEventListener("mousemove", function(e) {
+    if (IsInBoard(e.clientX, e.clientY)) {
+        let boardRect = board.getBoundingClientRect();
+        let gameAreaRect = gameArea.getBoundingClientRect();
+        let crosshairRect = crosshairElement.getBoundingClientRect();
+        let minX = boardRect.x - 64;
+        let maxX = minX + boardRect.width + 64;
+        let minY = boardRect.y;
+        let maxY = gameAreaRect.y + gameAreaRect.height - crosshairRect.height;
+        crosshairElement.style.left = `${clamp(e.clientX - 65, minX, maxX)}px`;
+        crosshairElement.style.top = `${clamp(e.clientY - 60, minY, maxY)}px`;
+    }
+});
+
+window.addEventListener("click", function(e) {
+    if (Ship.isBoardGenerated && started && IsInBoard(e.clientX, e.clientY)) {
+        CheckTilesClick(e.clientX, e.clientY);
+    }
+});
+
+function ShowShips() {
+    for (let tileLoc of Ship.locToShipDict) {
+        let tile = tiles[parseInt(tileLoc[0])];
+        let ship = tileLoc[1].shipInstance;
+        tile.classList.add(`tile-with-${ship.class}`);
+        tile.style.backgroundPositionY = `-${tileSize * Ship.cssBackgroundPosMultiplierDict.get(ship.name.toLowerCase())}px`;
+        if (tileLoc[1].section.isHit) {
+            tile.style.backgroundPositionY = `${parseInt(tile.style.backgroundPositionY) - tileSize}px`
+        }
+    }
+}
+
+function GameOver() {
+    setTimeout(() => {
+        ShowShips();
+        setTimeout(() => {
+            console.log("TODO: Create Game Over Dialog or screen or something")
+        }, 750);
+    }, 500);
 }

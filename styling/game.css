@@ -8,6 +8,36 @@
     background-position: 0 0;
 }
 
+.tile-with-destroyer-icon {
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 0;
+}
+
+.tile-with-cruiser-icon {
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 -300px;
+}
+
+.tile-with-submarine-icon {
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 -600px;
+}
+
+.tile-with-battleship-icon {
+    background-image: url("../images/battleship-icons-1-4.png");
+    background-size: cover;
+    background-position: 0 -900px;
+}
+
+.tile-with-carrier-icon {
+    background-image: url("../images/battleship-icons-5.png");
+    background-size: cover;
+    background-position: 0 0;
+}
+
 .board {
     display: flex;
     flex-direction: row;
@@ -110,4 +140,16 @@
     background-image: url("../images/player-ship.png");
     background-size: cover;
     background-position: 0 0;
+}
+
+.crosshairs {
+    height: 128px;
+    width: 128px;
+    background-image: url("../images/crosshair_4.png");
+    background-size: cover;
+
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    cursor: none;
 }
