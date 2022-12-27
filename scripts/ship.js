@@ -24,12 +24,14 @@ class Ship {
 
     static createEmptyBoardList(boardSize) {
         Ship.boardSize = boardSize;
+        Ship.isShipHere = [];
         for (let i = 0; i < Ship.boardSize**2; i++) {
             Ship.isShipHere.push(false);
         }
         Ship.idxStepForDirections = [1, -Ship.boardSize, -1, Ship.boardSize];
         Ship.locToShipDict = new Map();
         Ship.isBoardGenerated = true;
+        Ship.allShipsSunk = false;
         Ship.cssBackgroundPosMultiplierDict = new Map();
         Ship.cssBackgroundPosMultiplierDict.set("destroyer", 0);
         Ship.cssBackgroundPosMultiplierDict.set("cruiser", 2);
@@ -58,6 +60,16 @@ class Ship {
     showIcon() {
         this.iconElement.classList.remove(this.destroyedClass);
         ShowElement(this.iconElementArea);
+    }
+
+    resetShip() {
+        this.isSunk = false;
+        this.isPlaced = false;
+        this.sections = [];
+        for (let i = 0; i < this.length; i++) {
+            this.sections.push({ locId: "", isHit: false });
+        }
+        HideElement(this.iconElementArea);
     }
 
     tryPlace() {

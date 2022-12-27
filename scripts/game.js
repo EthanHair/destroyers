@@ -20,6 +20,8 @@ const carrierIconArea = document.getElementById("carrier-icon-area");
 const ammoLeftElement = document.getElementById("ammo-left");
 const playerShip = document.getElementById("player-ship");
 const crosshairElement = document.getElementById("crosshairs");
+const gameoverDialog = document.getElementById("gameover-dialog");
+const gameoverText = document.getElementById("gameover-text");
 
 //#endregion
 
@@ -41,7 +43,7 @@ diffDict.set("medium", { boardSize: 7,
                                   new Ship(3, "Cruiser", cruiserIcon, cruiserIconArea), 
                                   new Ship(4, "Battleship", battleshipIcon, battleshipIconArea) ] });
 diffDict.set("hard", { boardSize: 10,
-                       ammo: 65,
+                       ammo: 55,
                        numShips: 5,
                        ships: [ new Ship(2, "Destroyer", destroyerIcon, destroyerIconArea), 
                                 new Ship(3, "Cruiser", cruiserIcon, cruiserIconArea), 
@@ -57,12 +59,15 @@ let playerShipAnimation;
 let canPlayAnimation = true;
 let started = false;
 let hasShotThere = [];
+let canMoveCrosshairs = false;
 
 //#endregion
 
 function StartGame() {
+    gameArea.classList.remove("blurred");
     HideElement(titlePage);
     ShowElement(gameArea);
+    canMoveCrosshairs = true;
 }
 
 function Easy() {
@@ -103,6 +108,7 @@ function GenerateBoard() {
     board.style.width = `${boardPixels}px`;
     board.style.height = `${boardPixels}px`;
     board.innerHTML = "";
+    hasShotThere = [];
     StartGame();
 
     for (let i = 0; i < Ship.boardSize**2; i++) {
@@ -121,6 +127,7 @@ function GenerateBoard() {
 
 function PlaceShips() {
     for (let ship of currentDiff.ships) {
+        ship.resetShip();
         ship.tryPlace();
         ship.showIcon();
     }
@@ -147,24 +154,25 @@ function Shoot(tile) {
             if (ship.isSunk) {
                 console.log(`You sunk the ${ship.name}!`);
             }
-            let allShipsSunk = true;
-            for (let ship of currentDiff.ships) {
-                if (!ship.isSunk) {
-                    allShipsSunk = false;
-                }
-            }
-            if (allShipsSunk) {
-                Ship.allShipsSunk = true;
-                console.log("You have sunk all ships!");
-                GameOver()
-            }
+            
         }
         else {
             tile.style.backgroundPositionY = `${tileSize * 2}px`;
         }
+        
+        let allShipsSunk = true;
+        for (let ship of currentDiff.ships) {
+            if (!ship.isSunk) {
+                allShipsSunk = false;
+            }
+        }
 
-        if (ammoLeft <= 0) {
-            GameOver()
+        if (allShipsSunk) {
+            Ship.allShipsSunk = true;
+            console.log("You have sunk all ships!");
+            GameOver("You have sunk all the ships!<br>Good job!");
+        } else if (ammoLeft <= 0) {
+            GameOver("You have run out of ammo!<br>Have better aim next time!")
         }
     }
 }
@@ -224,14 +232,14 @@ function IsInBoard(x, y) {
 }
 
 window.addEventListener("mousemove", function(e) {
-    if (IsInBoard(e.clientX, e.clientY)) {
+    if (IsInBoard(e.clientX, e.clientY) && canMoveCrosshairs) {
         let boardRect = board.getBoundingClientRect();
         let gameAreaRect = gameArea.getBoundingClientRect();
         let crosshairRect = crosshairElement.getBoundingClientRect();
         let minX = boardRect.x - 64;
         let maxX = minX + boardRect.width + 64;
-        let minY = boardRect.y;
-        let maxY = gameAreaRect.y + gameAreaRect.height - crosshairRect.height;
+        let minY = -16;
+        let maxY = gameAreaRect.y + gameAreaRect.height - crosshairRect.height + 16;
         crosshairElement.style.left = `${clamp(e.clientX - 65, minX, maxX)}px`;
         crosshairElement.style.top = `${clamp(e.clientY - 60, minY, maxY)}px`;
     }
@@ -255,11 +263,30 @@ function ShowShips() {
     }
 }
 
-function GameOver() {
+function GameOver(text) {
+    canMoveCrosshairs = false;
     setTimeout(() => {
         ShowShips();
         setTimeout(() => {
-            console.log("TODO: Create Game Over Dialog or screen or something")
+            started = false;
+            gameoverText.innerHTML = text;
+            gameArea.classList.add("blurred");
+            ShowElement(gameoverDialog);
         }, 750);
-    }, 500);
+    }, 750);
+}
+
+function RestartGame() {
+    HideElement(gameoverDialog);
+    GenerateBoard();
+    PlaceShips();
+}
+
+function Home() {
+    for (let ship of currentDiff.ships) {
+        ship.resetShip();
+    }
+    HideElement(gameoverDialog);
+    HideElement(gameArea);
+    ShowElement(titlePage);
 }

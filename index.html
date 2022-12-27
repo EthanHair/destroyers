@@ -14,9 +14,8 @@
     </head>
     <body class="center row">
         <div id="title-page">
-            <div class="pixel-words column center">
-                Welcome to Sinky Squares!
-                <br>
+            <div class="pixel-words column center gap-16">
+                <span>Welcome to Sinky Squares!</span>
                 <span class="info-text">
                     Choose a difficulty and click on the squares to try and sink the ships!
                 </span>
@@ -28,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div id="game-area" class="row width-100 space-between d-none align-center">
+        <div id="game-area" class="row width-100 height-100 space-between d-none align-center">
             <div class="width-20 height-100 justify-end">
                 <div class="column center pixel-words">
                     <div id="player-ship" class="player-ship"></div>
@@ -60,6 +59,18 @@
                 </div>
             </div>
             <div id="crosshairs" class="crosshairs"></div>
+        </div>
+        <div id="gameover-dialog" class="gameover-dialog pixel-words column gap-8 d-none">
+            <span>Game Over!</span>
+            <span id="gameover-text" class="info-text"></span>
+            <span class="info-text">
+                Select Home choose a new difficulty or select Restart to play again on this difficulty
+            </span>
+            <br>
+            <div class="row width-100 space-evenly">
+                <span class="clickable" onclick="Home()">Home</span>
+                <span class="clickable" onclick="RestartGame()">Restart</span>
+            </div>
         </div>
     </body>
     <script src="scripts/site.js"></script>
