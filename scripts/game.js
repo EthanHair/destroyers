@@ -63,6 +63,8 @@ let canMoveCrosshairs = false;
 
 //#endregion
 
+initializeSnackbars("pixel-words");
+
 function StartGame() {
     gameArea.classList.remove("blurred");
     HideElement(titlePage);
@@ -153,6 +155,9 @@ function Shoot(tile) {
             ship.checkSunk();
             if (ship.isSunk) {
                 console.log(`You sunk the ${ship.name}!`);
+                setTimeout(() => {
+                    showSuccessSnackbar(`You sunk the ${ship.name}!`);
+                }, 500);
             }
             
         }
